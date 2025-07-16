@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iniciar Sesión - RH</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #2980b9, #6dd5fa);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .card {
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .btn-primary {
+      background-color: #2980b9;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #1f6390;
+    }
+    .toggle-password {
+      cursor: pointer;
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" style="width: 100%; max-width: 400px;">
+    <h4 class="text-center mb-4">👤 Iniciar Sesión</h4>
+    <form method="POST">
+      <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" placeholder="tucorreo@ejemplo.com" required />
+      </div>
+      <div class="mb-3 position-relative">
+        <label>Contraseña</label>
+        <input type="password" name="password" id="password" class="form-control" required />
+        <i class="bi bi-eye toggle-password" onclick="togglePassword()"></i>
+      </div>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="alert alert-danger">{{ messages[0] }}</div>
+        {% endif %}
+      {% endwith %}
+      <button type="submit" class="btn btn-primary w-100">Entrar</button>
+      <div class="text-center mt-3">
+        <a href="{{ url_for('register') }}">¿No tienes cuenta? <strong>Regístrate</strong></a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const pass = document.getElementById('password');
+      pass.type = pass.type === 'password' ? 'text' : 'password';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gestionar Proyectos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafb;
+      padding: 30px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #1f2937;
+      margin-bottom: 30px;
+    }
+    form {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+      margin-bottom: 40px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #374151;
+    }
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #d1d5db;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    textarea:focus {
+      border-color: #3b82f6;
+      outline: none;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    button {
+      background-color: #3b82f6;
+      color: white;
+      font-weight: 600;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #2563eb;
+    }
+    .alert {
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+    .alert-success {
+      background-color: #d1fae5;
+      color: #065f46;
+      border: 1px solid #10b981;
+    }
+    .alert-danger {
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #ef4444;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+    }
+    th, td {
+      padding: 14px 20px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+    th {
+      background-color: #3b82f6;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>🗂️ Gestión de Proyectos</h1>
+
+  <!-- Mensajes flash -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('admin_proyectos') }}" id="formProyecto">
+    <label for="nombre">Nombre del Proyecto *</label>
+    <input type="text" id="nombre" name="nombre" required maxlength="100" placeholder="Ingrese nombre del proyecto" />
+
+    <label for="descripcion">Descripción</label>
+    <textarea id="descripcion" name="descripcion" placeholder="Descripción breve del proyecto"></textarea>
+
+    <label for="fecha_inicio">Fecha de Inicio *</label>
+    <input type="date" id="fecha_inicio" name="fecha_inicio" required />
+
+    <label for="fecha_fin">Fecha de Fin *</label>
+    <input type="date" id="fecha_fin" name="fecha_fin" required />
+
+    <button type="submit">Crear Proyecto</button>
+  </form>
+
+  <h2>Proyectos Existentes</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Fecha Inicio</th>
+        <th>Fecha Fin</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in proyectos %}
+      <tr>
+        <td>{{ p.nombre }}</td>
+        <td>{{ p.descripcion }}</td>
+        <td>{{ p.fecha_inicio }}</td>
+        <td>{{ p.fecha_fin }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" style="text-align:center; color:#6b7280;">No hay proyectos creados</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script>
+    // Validación simple: fecha inicio no puede ser mayor a fecha fin
+    document.getElementById('formProyecto').addEventListener('submit', function(event) {
+      const fi = document.getElementById('fecha_inicio').value;
+      const ff = document.getElementById('fecha_fin').value;
+      if (fi && ff && fi > ff) {
+        event.preventDefault();
+        alert('La fecha de inicio no puede ser mayor que la fecha de fin.');
+      }
+    });
+  </script>
+</body>
+</html>
