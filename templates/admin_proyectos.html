@@ -2,164 +2,158 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Gestionar Proyectos</title>
+  <title>🗂️ Gestión de Proyectos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9fafb;
-      padding: 30px;
-      max-width: 800px;
+      background: #f1f3f5;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 40px 10px;
+    }
+    .container {
+      max-width: 1100px;
       margin: auto;
     }
-    h1 {
+    .page-title {
       text-align: center;
-      color: #1f2937;
+      font-size: 2.2rem;
+      font-weight: bold;
       margin-bottom: 30px;
+      color: #343a40;
     }
-    form {
-      background: white;
+    .card {
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.06);
       padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
-      margin-bottom: 40px;
     }
-    label {
-      display: block;
+    .card h4 {
+      color: #2c3e50;
       font-weight: 600;
-      margin-bottom: 8px;
-      color: #374151;
-    }
-    input[type="text"],
-    input[type="date"],
-    textarea {
-      width: 100%;
-      padding: 10px 14px;
-      border-radius: 8px;
-      border: 1.5px solid #d1d5db;
       margin-bottom: 20px;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
     }
-    input[type="text"]:focus,
-    input[type="date"]:focus,
-    textarea:focus {
-      border-color: #3b82f6;
-      outline: none;
-    }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    button {
-      background-color: #3b82f6;
-      color: white;
+    .form-label {
       font-weight: 600;
+      color: #495057;
+    }
+    .form-control:focus {
+      border-color: #339af0;
+      box-shadow: none;
+    }
+    .btn-submit {
+      background-color: #339af0;
       border: none;
-      padding: 12px 28px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #2563eb;
-    }
-    .alert {
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 25px;
+      color: #fff;
       font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 8px;
     }
-    .alert-success {
-      background-color: #d1fae5;
-      color: #065f46;
-      border: 1px solid #10b981;
+    .btn-submit:hover {
+      background-color: #1c7ed6;
     }
-    .alert-danger {
-      background-color: #fee2e2;
-      color: #991b1b;
-      border: 1px solid #ef4444;
+    .table thead th {
+      background-color: #339af0;
+      color: #fff;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+    .table tbody tr:nth-child(odd) {
+      background: #f8f9fa;
     }
-    th, td {
-      padding: 14px 20px;
-      border-bottom: 1px solid #e5e7eb;
-      text-align: left;
-    }
-    th {
-      background-color: #3b82f6;
-      color: white;
+    .no-data {
+      text-align: center;
+      color: #6c757d;
     }
   </style>
 </head>
 <body>
-  <h1>🗂️ Gestión de Proyectos</h1>
+  <div class="container">
+    <h1 class="page-title"><i class="bi bi-folder2-open me-2"></i>Gestión de Proyectos</h1>
 
-  <!-- Mensajes flash -->
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
+    <div class="row g-4">
+      <!-- Formulario -->
+      <div class="col-md-6">
+        <div class="card">
+          <h4><i class="bi bi-plus-circle me-2"></i>Nuevo Proyecto</h4>
 
-  <form method="POST" action="{{ url_for('admin_proyectos') }}" id="formProyecto">
-    <label for="nombre">Nombre del Proyecto *</label>
-    <input type="text" id="nombre" name="nombre" required maxlength="100" placeholder="Ingrese nombre del proyecto" />
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
 
-    <label for="descripcion">Descripción</label>
-    <textarea id="descripcion" name="descripcion" placeholder="Descripción breve del proyecto"></textarea>
+          <form id="formProyecto" method="POST" action="{{ url_for('admin_proyectos') }}">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre del Proyecto *</label>
+              <input type="text" id="nombre" name="nombre" class="form-control" required maxlength="100" placeholder="Ingrese nombre del proyecto" />
+            </div>
 
-    <label for="fecha_inicio">Fecha de Inicio *</label>
-    <input type="date" id="fecha_inicio" name="fecha_inicio" required />
+            <div class="mb-3">
+              <label for="descripcion" class="form-label">Descripción</label>
+              <textarea id="descripcion" name="descripcion" class="form-control" placeholder="Descripción breve del proyecto" rows="3"></textarea>
+            </div>
 
-    <label for="fecha_fin">Fecha de Fin *</label>
-    <input type="date" id="fecha_fin" name="fecha_fin" required />
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="fecha_inicio" class="form-label">Fecha de Inicio *</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" required />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="fecha_fin" class="form-label">Fecha de Fin *</label>
+                <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" required />
+              </div>
+            </div>
 
-    <button type="submit">Crear Proyecto</button>
-  </form>
+            <button type="submit" class="btn btn-submit w-100">
+              <i class="bi bi-check2-circle me-1"></i>Crear Proyecto
+            </button>
+          </form>
+        </div>
+      </div>
 
-  <h2>Proyectos Existentes</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Fecha Inicio</th>
-        <th>Fecha Fin</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for p in proyectos %}
-      <tr>
-        <td>{{ p.nombre }}</td>
-        <td>{{ p.descripcion }}</td>
-        <td>{{ p.fecha_inicio }}</td>
-        <td>{{ p.fecha_fin }}</td>
-      </tr>
-      {% else %}
-      <tr><td colspan="4" style="text-align:center; color:#6b7280;">No hay proyectos creados</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      <!-- Tabla de Proyectos -->
+      <div class="col-md-6">
+        <div class="card">
+          <h4><i class="bi bi-list-ul me-2"></i>Proyectos Existentes</h4>
+          <div class="table-responsive mt-3">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Inicio</th>
+                  <th>Fin</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for p in proyectos %}
+                <tr>
+                  <td>{{ p.nombre }}</td>
+                  <td>{{ p.fecha_inicio }}</td>
+                  <td>{{ p.fecha_fin }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="3" class="no-data">No hay proyectos registrados.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
-    // Validación simple: fecha inicio no puede ser mayor a fecha fin
-    document.getElementById('formProyecto').addEventListener('submit', function(event) {
+    // Validación simple de fechas
+    document.getElementById('formProyecto').addEventListener('submit', function(e) {
       const fi = document.getElementById('fecha_inicio').value;
       const ff = document.getElementById('fecha_fin').value;
       if (fi && ff && fi > ff) {
-        event.preventDefault();
-        alert('La fecha de inicio no puede ser mayor que la fecha de fin.');
+        e.preventDefault();
+        alert("⚠️ La fecha de inicio no puede ser mayor que la fecha de fin.");
       }
     });
   </script>

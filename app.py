@@ -166,9 +166,6 @@ def analizar_candidatos():
 
 
 
-
-
-
 @app.route('/admin/asignar', methods=['GET', 'POST'])
 def asignar_empleados():
     conn = sqlite3.connect('database.db')
