@@ -315,7 +315,5 @@ def ver_avances():
     return render_template('ver_avances.html', avances=avances, proyectos=proyectos, empleados=empleados)
 
 
-
-
 if __name__ == '__main__':
     app.run(debug=True)

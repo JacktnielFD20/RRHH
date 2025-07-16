@@ -13,12 +13,10 @@
       font-family: 'Segoe UI', sans-serif;
       padding: 30px 15px;
     }
-
     .container {
       max-width: 1200px;
       margin: auto;
     }
-
     .header h1 {
       text-align: center;
       font-weight: bold;
@@ -26,7 +24,6 @@
       margin-bottom: 30px;
       font-size: 2.3rem;
     }
-
     .filter-btns {
       display: flex;
       flex-wrap: wrap;
@@ -34,19 +31,22 @@
       gap: 12px;
       margin-bottom: 30px;
     }
-
     .filter-btns .btn {
       border-radius: 30px;
       padding: 8px 20px;
       font-weight: 500;
     }
-
+    .filter-btns .btn.active,
+    .filter-btns .btn:focus {
+      background-color: #339af0;
+      color: white;
+      border-color: #339af0;
+    }
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
     }
-
     .avance-card {
       background: rgba(255, 255, 255, 0.75);
       border-radius: 16px;
@@ -57,20 +57,17 @@
       transition: all 0.3s ease;
       border: 1px solid rgba(0, 0, 0, 0.05);
     }
-
     .avance-title {
       font-weight: 600;
       font-size: 1.1rem;
       color: #333;
       margin-bottom: 10px;
     }
-
     .avance-meta {
       font-size: 0.95rem;
       margin-bottom: 8px;
       color: #555;
     }
-
     .badge-week {
       position: absolute;
       top: 15px;
@@ -81,26 +78,18 @@
       border-radius: 12px;
       font-size: 0.75rem;
     }
-
     .no-data {
       text-align: center;
       color: #6c757d;
       font-size: 1.1rem;
       margin-top: 40px;
     }
-
-    .btn-outline-primary.active,
-    .btn-outline-primary:focus {
-      background-color: #339af0;
-      color: white;
-      border-color: #339af0;
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1><i class="bi bi-bar-chart-fill me-2"></i> Avances Registrados</h1>
+      <h1><i class="bi bi-bar-chart-fill me-2"></i>Avances Registrados</h1>
     </div>
 
     <!-- Filtros -->
@@ -108,25 +97,29 @@
     <div class="filter-btns">
       <button class="btn btn-outline-primary active" data-filter="all">Todos</button>
       {% for proj in proyectos %}
-      <button class="btn btn-outline-primary" data-filter="{{ proj }}">{{ proj }}</button>
+        <button class="btn btn-outline-primary"
+                data-filter="{{ proj|lower|replace(' ', '-') }}">
+          {{ proj }}
+        </button>
       {% endfor %}
     </div>
 
     {% if avances %}
-    <div class="cards-grid">
-      {% for a in avances %}
-      <div class="avance-card" data-proyecto="{{ a.proyecto }}">
-        <div class="avance-title">{{ a.proyecto }}</div>
-        <div class="avance-meta"><strong>Actividad:</strong> {{ a.actividad }}</div>
-        <div class="avance-meta"><strong>Empleado:</strong> {{ a.usuario }}</div>
-        <div class="avance-meta"><strong>Descripción:</strong> {{ a.descripcion }}</div>
-        <div class="avance-meta"><strong>Fecha:</strong> {{ a.fecha }}</div>
-        <span class="badge-week">Semana {{ a.semana }}</span>
+      <div class="cards-grid">
+        {% for a in avances %}
+          <div class="avance-card"
+               data-proyecto="{{ a.proyecto|lower|replace(' ', '-') }}">
+            <div class="avance-title">{{ a.proyecto }}</div>
+            <div class="avance-meta"><strong>Actividad:</strong> {{ a.actividad }}</div>
+            <div class="avance-meta"><strong>Empleado:</strong> {{ a.usuario }}</div>
+            <div class="avance-meta"><strong>Descripción:</strong> {{ a.descripcion }}</div>
+            <div class="avance-meta"><strong>Fecha:</strong> {{ a.fecha }}</div>
+            <span class="badge-week">Semana {{ a.semana }}</span>
+          </div>
+        {% endfor %}
       </div>
-      {% endfor %}
-    </div>
     {% else %}
-    <p class="no-data">No hay avances registrados.</p>
+      <p class="no-data">No hay avances registrados.</p>
     {% endif %}
   </div>
 
